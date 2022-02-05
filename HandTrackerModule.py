@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import time
+import re
 
 
 class HandDetector:
@@ -11,7 +12,7 @@ class HandDetector:
         self.detectioncon = detectioncon
         self.trackingcon = trackingcon
         self.mpHands = mp.solutions.hands
-        self.hands = mpHands.Hands(False, 4, 1, 0.5, 0.5)
+        self.hands = self.mpHands.Hands(False, 4, 1, 0.5, 0.5)
         self.mpDraw = mp.solutions.drawing_utils
 
     def findHands(self,img, draw=True):
@@ -27,7 +28,7 @@ class HandDetector:
     def findPosition(self,img, handno=0,draw=True):
         lmList=[]
         if self.results.multi_hand_landmarks:
-            myHand = self.results.multi_hand_landmarks[handNo]
+            myHand = self.results.multi_hand_landmarks[handno]
             for id, lm in enumerate(myHand.landmark):
                 h, w, c = img.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
@@ -35,6 +36,12 @@ class HandDetector:
                 if draw:
                     cv2.circle(img, (cx, cy), 8, (255, 0, 255), cv2.FILLED)
         return lmList
+
+    def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
+        return [
+            int(text)
+            if text.isdigit() else text.lower()
+            for text in _nsre.split(s)]
 
 def main():
     pTime = 0
