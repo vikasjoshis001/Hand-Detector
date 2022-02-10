@@ -2,14 +2,14 @@ import cv2
 import time
 import os
 import mediapipe as mp
-import HandTrackerModule as htm
+import HandTrackingModule as htm
 import re
 
 wCam, hCam = 640, 480
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
 cap.set(4, hCam)
-detector = htm.HandDetector()
+detector = htm.handDetector()
 tipIds = [4, 8, 12, 16, 20]
 cTime = 0
 pTime = 0
